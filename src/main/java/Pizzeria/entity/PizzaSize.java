@@ -8,7 +8,7 @@ public class PizzaSize {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "pizza_id", nullable = false)
@@ -28,13 +28,12 @@ public class PizzaSize {
 
     public PizzaSize() {}
 
-    // GETTERS & SETTERS
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
