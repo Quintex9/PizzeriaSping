@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrácia</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav>
+    <div class="left">
+        <a th:href="@{/}">Pizzeria</a>
+    </div>
+</nav>
+
+<div class="form-container">
+    <h2>Registrácia</h2>
+
+    <div th:if="${error}" class="alert error" th:text="${error}"></div>
+
+    <form th:action="@{/register}" method="post" th:object="${user}">
+
+        <label>Meno a priezvisko:</label>
+        <input type="text" th:field="*{fullName}" required>
+
+        <label>Email:</label>
+        <input type="email" th:field="*{email}" required>
+
+        <label>Heslo:</label>
+        <input type="password" th:field="*{password}" required>
+
+        <label>Telefón:</label>
+        <input type="text" th:field="*{phone}">
+
+        <label>Adresa:</label>
+        <input type="text" th:field="*{address}">
+
+        <button type="submit" class="btn-primary">Registrovať</button>
+    </form>
+
+    <p class="form-link">
+        Máte už účet? <a th:href="@{/login}">Prihláste sa</a>
+    </p>
+</div>
+
+</body>
+</html>

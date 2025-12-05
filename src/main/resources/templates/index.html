@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">Pizzeria</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav>
+    <div class="left">
+        <a th:href="@{/}">Pizzeria</a>
+        <a th:href="@{/pizza}">Ponuka</a>
+    </div>
+
+    <div class="right">
+        <span sec:authorize="!isAuthenticated()">
+            <a th:href="@{/login}">Prihlásiť</a>
+            <a th:href="@{/register}">Registrovať</a>
+        </span>
+
+        <span sec:authorize="isAuthenticated()">
+            <a th:href="@{/profile}">Môj profil</a>
+            <a th:href="@{/logout}">Odhlásiť</a>
+        </span>
+
+        <span sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/admin}">Admin</a>
+        </span>
+    </div>
+</nav>
+
+<div class="container">
+    <section class="hero">
+        <h1>Vitajte v našej Pizzerii!</h1>
+        <p>Talianske recepty, čerstvé suroviny, najlepšia chuť v meste.</p>
+
+        <a th:href="@{/pizza}">
+            <button>Zobraziť ponuku</button>
+        </a>
+    </section>
+</div>
+
+<footer>
+    © 2025 Pizzeria — všetky práva vyhradené
+</footer>
+
+</body>
+</html>

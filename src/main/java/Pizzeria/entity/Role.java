@@ -1,6 +1,5 @@
 package Pizzeria.entity;
 
-
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,6 +22,13 @@ public class Role {
     private Set<User> users = new HashSet<>();
 
     public Role() {}
+
+    // 💥 KONŠTRUKTOR POTREBNÝ PRE SEEDER
+    public Role(Integer id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
 
     public Integer getId() {
         return id;
@@ -56,4 +62,3 @@ public class Role {
         this.users = users;
     }
 }
-

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Prihlásenie</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav>
+    <div class="left">
+        <a th:href="@{/}">Pizzeria</a>
+    </div>
+</nav>
+
+<div class="form-container">
+    <h2>Prihlásenie</h2>
+
+    <div th:if="${param.error}" class="alert error">
+        Nesprávny email alebo heslo!
+    </div>
+
+    <div th:if="${param.registered}" class="alert success">
+        Registrácia úspešná. Môžete sa prihlásiť.
+    </div>
+
+    <form th:action="@{/login}" method="post">
+
+        <label>Email:</label>
+        <input type="text" name="username" placeholder="email@domena.sk" required>
+
+        <label>Heslo:</label>
+        <input type="password" name="password" required>
+
+        <button type="submit" class="btn-primary">Prihlásiť</button>
+    </form>
+
+    <p class="form-link">
+        Nemáte účet? <a th:href="@{/register}">Zaregistrujte sa</a>
+    </p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,207 @@
+/* =====================================
+   GLOBAL STYLE
+===================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+    background: #fafafa;
+    color: #333;
+    line-height: 1.6;
+    padding-top: 60px; /* pre navbar */
+}
+
+/* =====================================
+   NAVBAR
+===================================== */
+
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #20232a;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 30px;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+nav a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-right: 20px;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+nav a:hover {
+    color: #61dafb;
+}
+
+/* Right side links */
+nav .right {
+    display: flex;
+    align-items: center;
+}
+
+/* =====================================
+   MAIN CONTENT
+===================================== */
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* =====================================
+   HERO (úvodná sekcia)
+===================================== */
+
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+    background: url('/img/pizza-bg.jpg') center/cover no-repeat;
+    border-radius: 12px;
+    color: white;
+    margin-bottom: 40px;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.hero p {
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+.hero button {
+    padding: 14px 28px;
+    border: none;
+    border-radius: 6px;
+    background: #e63946;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.hero button:hover {
+    background: #d62828;
+}
+
+/* =====================================
+   FOOTER
+===================================== */
+
+footer {
+    margin-top: 60px;
+    padding: 20px;
+    text-align: center;
+    background: #20232a;
+    color: #aaa;
+}
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    nav .right {
+        margin-top: 10px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+    }
+
+    .hero p {
+        font-size: 18px;
+    }
+}
+/* ============================
+   FORM DESIGN
+============================ */
+
+.form-container {
+    max-width: 400px;
+    margin: 80px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.form-container h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-container label {
+    font-weight: 600;
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    background: #e63946;
+    color: white;
+    border: none;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-primary:hover {
+    background: #d62828;
+}
+
+.alert {
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.alert.error {
+    background: #ffe5e5;
+    color: #c1121f;
+}
+
+.alert.success {
+    background: #e6ffe6;
+    color: #2d6a4f;
+}
+
+.form-link {
+    text-align: center;
+    margin-top: 15px;
+}
