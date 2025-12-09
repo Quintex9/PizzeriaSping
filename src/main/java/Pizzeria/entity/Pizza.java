@@ -35,7 +35,9 @@ public class Pizza {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "pizza", cascade = CascadeType.ALL)
+    @OrderBy("sizeLabel ASC")
     private Set<PizzaSize> sizes = new HashSet<>();
+
 
     public Pizza() {}
 

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ponuka pízz</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<nav>
+    <div class="left">
+        <a th:href="@{/}">Pizzeria</a>
+        <a th:href="@{/pizza}" class="active">Ponuka</a>
+    </div>
+
+    <div class="right">
+
+        <!-- Pre neprihláseného používateľa -->
+        <span sec:authorize="isAnonymous()">
+            <a th:href="@{/login}">Prihlásiť</a>
+            <a th:href="@{/register}">Registrovať</a>
+        </span>
+
+        <!-- Pre prihláseného používateľa -->
+        <span sec:authorize="isAuthenticated()">
+            <a th:href="@{/profile}">Môj profil</a>
+            <a th:href="@{/logout}">Odhlásiť</a>
+        </span>
+    </div>
+</nav>
+
+
+<div class="container">
+    <h1>Ponuka pízz</h1>
+
+    <div class="pizza-grid">
+
+        <div class="pizza-card" th:each="pizza : ${pizzas}">
+            <img th:src="${pizza.imageUrl}" alt="Pizza obrázok">
+
+            <h3 th:text="${pizza.name}">Názov pizze</h3>
+            <p th:text="${pizza.description}">Popis pizze</p>
+
+            <div class="price-section">
+
+                <div class="size-row" th:each="size : ${pizza.sizes}">
+
+                    <strong th:text="${size.sizeLabel}">M</strong>:
+                    <span th:text="${size.price + ' €'}"></span>
+
+                    <form th:action="@{/cart/add}" method="post" style="display:inline;">
+                        <input type="hidden" name="pizzaId" th:value="${pizza.id}">
+                        <input type="hidden" name="sizeId" th:value="${size.id}">
+                        <button type="submit" class="add-cart-btn">Pridať</button>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<footer>
+    © 2025 Pizzeria — všetky práva vyhradené
+</footer>
+
+</body>
+</html>

@@ -37,9 +37,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/pizza", "/pizza/**",
-                                "/img/**", "/css/**",
+                                "/img/**", "/images/**", "/css/**",
                                 "/register", "/login")
                         .permitAll()
+
 
                         .requestMatchers("/cart/**", "/order/**").hasRole("CUSTOMER")
                         .requestMatchers("/kuchar/**").hasRole("COOK")

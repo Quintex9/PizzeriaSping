@@ -10,9 +10,7 @@ public interface PizzaService {
 
     Pizza findBySlug(String slug);
 
-    List<Pizza> search(String keyword);
-
-    List<Pizza> findAllActive();
+    List<Pizza> findAll();
 
     Pizza save(Pizza pizza);
 

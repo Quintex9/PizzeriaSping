@@ -26,13 +26,8 @@ public class PizzaServiceImpl implements PizzaService {
     }
 
     @Override
-    public List<Pizza> search(String keyword) {
-        return pizzaRepository.findByNameContainingIgnoreCase(keyword);
-    }
-
-    @Override
-    public List<Pizza> findAllActive() {
-        return pizzaRepository.findByActiveTrue();
+    public List<Pizza> findAll() {
+        return pizzaRepository.findAllWithSizes();
     }
 
     @Override
