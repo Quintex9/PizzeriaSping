@@ -10,31 +10,31 @@
 
 <body>
 
-<nav>
-    <div class="left">
-        <a th:href="@{/}">Pizzeria</a>
-        <a th:href="@{/pizza}" class="active">Ponuka</a>
-    </div>
-
-    <div class="right">
-
-        <!-- Pre neprihláseného používateľa -->
-        <span sec:authorize="isAnonymous()">
-            <a th:href="@{/login}">Prihlásiť</a>
-            <a th:href="@{/register}">Registrovať</a>
-        </span>
-
-        <!-- Pre prihláseného používateľa -->
-        <span sec:authorize="isAuthenticated()">
-            <a th:href="@{/profile}">Môj profil</a>
-            <a th:href="@{/logout}">Odhlásiť</a>
-        </span>
-    </div>
-</nav>
-
+<div th:replace="fragments/navbar :: navbar('pizza')"></div>
 
 <div class="container">
     <h1>Ponuka pízz</h1>
+
+    <form th:action="@{/pizza}" method="get" class="filter-bar">
+
+        <!-- SEARCH -->
+        <input type="text"
+               name="q"
+               placeholder="Hľadať pizzu..."
+               th:value="${q}">
+
+        <!-- TAG FILTER -->
+        <select name="tagId">
+            <option value="">Všetky tagy</option>
+            <option th:each="tag : ${tags}"
+                    th:value="${tag.id}"
+                    th:text="${tag.name}"
+                    th:selected="${tag.id == tagId}">
+            </option>
+        </select>
+
+        <button type="submit" class="btn-primary">Filtrovať</button>
+    </form>
 
     <div class="pizza-grid">
 
@@ -54,6 +54,7 @@
                     <form th:action="@{/cart/add}" method="post" style="display:inline;">
                         <input type="hidden" name="pizzaId" th:value="${pizza.id}">
                         <input type="hidden" name="sizeId" th:value="${size.id}">
+                        <input type="hidden" name="redirect" th:value="${redirect}">
                         <button type="submit" class="add-cart-btn">Pridať</button>
                     </form>
 

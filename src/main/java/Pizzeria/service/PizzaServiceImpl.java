@@ -31,6 +31,27 @@ public class PizzaServiceImpl implements PizzaService {
     }
 
     @Override
+    public List<Pizza> search(String q, Integer tagId) {
+
+        boolean hasQuery = q != null && !q.isBlank();
+        boolean hasTag = tagId != null;
+
+        if (!hasQuery && !hasTag) {
+            return pizzaRepository.findAllWithSizes();
+        }
+
+        if (hasQuery && hasTag) {
+            return pizzaRepository.searchByNameAndTag(q, tagId);
+        }
+
+        if (hasTag) {
+            return pizzaRepository.findByTagId(tagId);
+        }
+
+        return pizzaRepository.searchByName(q);
+    }
+
+    @Override
     public Pizza save(Pizza pizza) {
         return pizzaRepository.save(pizza);
     }

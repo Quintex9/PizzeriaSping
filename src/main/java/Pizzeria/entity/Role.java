@@ -23,7 +23,6 @@ public class Role {
 
     public Role() {}
 
-    // 💥 KONŠTRUKTOR POTREBNÝ PRE SEEDER
     public Role(Integer id, String name, String description) {
         this.id = id;
         this.name = name;

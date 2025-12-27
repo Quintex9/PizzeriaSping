@@ -38,6 +38,13 @@ public class Pizza {
     @OrderBy("sizeLabel ASC")
     private Set<PizzaSize> sizes = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "pizza_tags",
+            joinColumns = @JoinColumn(name = "pizza_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags = new HashSet<>();
 
     public Pizza() {}
 
@@ -113,5 +120,7 @@ public class Pizza {
     public void setSizes(Set<PizzaSize> sizes) {
         this.sizes = sizes;
     }
+
+
 }
 

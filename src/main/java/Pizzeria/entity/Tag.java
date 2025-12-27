@@ -2,6 +2,9 @@ package Pizzeria.entity;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "tags")
 public class Tag {
@@ -18,6 +21,9 @@ public class Tag {
 
     @Column(length = 255)
     private String description;
+
+    @ManyToMany(mappedBy = "tags")
+    private Set<Pizza> pizzas = new HashSet<>();
 
     public Tag() {}
 

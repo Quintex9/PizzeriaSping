@@ -12,6 +12,8 @@ public interface PizzaService {
 
     List<Pizza> findAll();
 
+    List<Pizza> search(String q, Integer tagId);
+
     Pizza save(Pizza pizza);
 
     void deleteById(Integer id);

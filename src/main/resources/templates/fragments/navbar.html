@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+
+<nav th:fragment="navbar(active)">
+    <div class="left">
+        <a th:href="@{/}"
+           th:classappend="${active == 'home'} ? 'active'">
+            Pizzeria
+        </a>
+
+        <a th:href="@{/pizza}"
+           th:classappend="${active == 'pizza'} ? 'active'">
+            Ponuka
+        </a>
+
+        <a th:href="@{/cart}"
+           th:classappend="${active == 'cart'} ? 'active'">
+            Košík
+        </a>
+    </div>
+
+    <div class="right">
+
+        <!-- Neprihlásený -->
+        <span sec:authorize="isAnonymous()">
+            <a th:href="@{/login}">Prihlásiť</a>
+            <a th:href="@{/register}">Registrovať</a>
+        </span>
+
+        <!-- Prihlásený -->
+        <span sec:authorize="isAuthenticated()">
+            <a th:href="@{/profile}">Môj profil</a>
+            <a th:href="@{/logout}">Odhlásiť</a>
+        </span>
+
+    </div>
+</nav>
+
+</body>
+</html>

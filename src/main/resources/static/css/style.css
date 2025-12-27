@@ -365,3 +365,140 @@ footer {
 .size-row {
     margin-top: 6px;
 }
+/* =======================
+   CART
+======================= */
+
+.cart-wrapper {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+.cart-title {
+    text-align: center;
+    color: #8b0000;
+    margin-bottom: 30px;
+}
+
+.cart-empty {
+    text-align: center;
+    padding: 40px;
+    background: #fff7f0;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.cart-card {
+    background: #fff7f0;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #e2c8b5;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item-info h3 {
+    margin: 0;
+    color: #5c1a1a;
+}
+
+.cart-item-info p {
+    margin: 4px 0;
+    font-size: 14px;
+}
+
+.cart-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+}
+
+.remove {
+    color: #b30000;
+    font-size: 18px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.remove:hover {
+    color: #ff0000;
+}
+
+.cart-summary {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #e2c8b5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+/* Buttons */
+.btn-primary, .btn-danger, .btn-success {
+    padding: 10px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background: #8b0000;
+}
+
+.btn-danger {
+    background: #b30000;
+}
+
+.btn-success {
+    background: #2e8b57;
+}
+
+.btn-primary:hover,
+.btn-danger:hover,
+.btn-success:hover {
+    opacity: 0.9;
+}
+
+/* FILTERR */
+.filter-bar {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0 30px;
+}
+
+.filter-bar input,
+.filter-bar select {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #d9cfc4;
+    font-size: 14px;
+    background: #fffdf9;
+}
+
+.filter-bar input {
+    flex: 1;
+}
+

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @Controller
 public class RegisterController {
 
@@ -38,22 +40,22 @@ public class RegisterController {
             return "register";
         }
 
-        // zašifrovať heslo
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        // default rola CUSTOMER
-        Role customerRole = roleRepository.findByName("CUSTOMER");
-
+        Role customerRole = roleRepository.findByName("ROLE_CUSTOMER");
         if (customerRole == null) {
-            model.addAttribute("error", "Rola CUSTOMER neexistuje v databáze!");
+            model.addAttribute("error", "Rola ROLE_CUSTOMER neexistuje!");
             return "register";
         }
 
         user.getRoles().add(customerRole);
         user.setEnabled(true);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
 
         userService.save(user);
 
         return "redirect:/login?registered";
     }
+
 }

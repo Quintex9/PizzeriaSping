@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Košík</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<!-- NAVBAR KOMPONENT -->
+<div th:replace="fragments/navbar :: navbar('cart')"></div>
+
+<div class="cart-wrapper">
+
+    <h1 class="cart-title">🛒 Váš košík</h1>
+
+    <!-- PRÁZDNY KOŠÍK -->
+    <div th:if="${items.isEmpty()}" class="cart-empty">
+        <p>Košík je prázdny </p>
+        <a th:href="@{/pizza}" class="btn-primary">Vybrať pizzu</a>
+    </div>
+
+    <!-- PLNÝ KOŠÍK -->
+    <div th:if="${!items.isEmpty()}" class="cart-card">
+
+        <div class="cart-item" th:each="item : ${items}">
+            <div class="cart-item-info">
+                <h3 th:text="${item.pizzaName}"></h3>
+                <p>Veľkosť: <strong th:text="${item.sizeLabel}"></strong></p>
+                <p>Množstvo: <strong th:text="${item.quantity}"></strong></p>
+            </div>
+
+            <div class="cart-item-actions">
+                <div class="price"
+                     th:text="${item.price * item.quantity} + ' €'"></div>
+
+                <a class="remove"
+                   th:href="@{|/cart/remove?pizzaId=${item.pizzaId}&sizeId=${item.sizeId}|}">
+                    ✖
+                </a>
+            </div>
+        </div>
+
+        <div class="cart-summary">
+            <h2>Spolu: <span th:text="${total} + ' €'"></span></h2>
+
+            <div class="cart-buttons">
+                <a th:href="@{/cart/clear}" class="btn-danger">Vyprázdniť košík</a>
+                <a th:href="@{/order}" class="btn-success">Objednať</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

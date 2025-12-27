@@ -9,28 +9,7 @@
 </head>
 <body>
 
-<nav>
-    <div class="left">
-        <a th:href="@{/}">Pizzeria</a>
-        <a th:href="@{/pizza}">Ponuka</a>
-    </div>
-
-    <div class="right">
-        <span sec:authorize="!isAuthenticated()">
-            <a th:href="@{/login}">Prihlásiť</a>
-            <a th:href="@{/register}">Registrovať</a>
-        </span>
-
-        <span sec:authorize="isAuthenticated()">
-            <a th:href="@{/profile}">Môj profil</a>
-            <a th:href="@{/logout}">Odhlásiť</a>
-        </span>
-
-        <span sec:authorize="hasRole('ADMIN')">
-            <a th:href="@{/admin}">Admin</a>
-        </span>
-    </div>
-</nav>
+<div th:replace="fragments/navbar :: navbar('home')"></div>
 
 <div class="container">
     <section class="hero">
