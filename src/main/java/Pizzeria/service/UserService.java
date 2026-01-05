@@ -17,7 +17,9 @@ public interface UserService {
 
     User getCurrentUser();
 
-    void updateProfile(String fullName, String phone, String address, String profileImageUrl);
+    void updateProfile(String fullName,
+                       String phone,
+                       String address);
 
     boolean changePassword(String currentPassword,
                            String newPassword,
@@ -34,4 +36,6 @@ public interface UserService {
     void activate(Integer userId);
 
     void deleteIfFresh(Integer userId);
+
+    void updateProfileImage(Integer userId, String imageUrl);
 }

@@ -97,15 +97,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void updateProfile(String fullName,
                               String phone,
-                              String address,
-                              String profileImageUrl) {
+                              String address) {
 
         User user = getCurrentUser();
 
         user.setFullName(fullName);
         user.setPhone(phone);
         user.setAddress(address);
-        user.setProfileImageUrl(profileImageUrl);
 
         userRepository.save(user);
     }
@@ -167,4 +165,13 @@ public class UserServiceImpl implements UserService {
 
         userRepository.deleteById(userId);
     }
+
+    @Transactional
+    public void updateProfileImage(Integer userId, String imageUrl) {
+        User user = userRepository.findById(userId)
+                .orElseThrow();
+
+        user.setProfileImageUrl(imageUrl);
+    }
+
 }

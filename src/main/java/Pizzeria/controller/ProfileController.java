@@ -1,9 +1,12 @@
 package Pizzeria.controller;
 
+import Pizzeria.entity.User;
+import Pizzeria.service.FileStorageService;
 import Pizzeria.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -11,9 +14,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ProfileController {
 
     private final UserService userService;
+    private final FileStorageService fileStorageService;
 
-    public ProfileController(UserService userService) {
+    public ProfileController(UserService userService,
+                             FileStorageService fileStorageService) {
         this.userService = userService;
+        this.fileStorageService = fileStorageService;
     }
 
     // =========================
@@ -27,7 +33,7 @@ public class ProfileController {
     }
 
     // =========================
-    // EDIT PROFILE
+    // EDIT PROFILE (bez obrázka)
     // =========================
 
     @GetMapping("/edit")
@@ -41,15 +47,45 @@ public class ProfileController {
             @RequestParam String fullName,
             @RequestParam String phone,
             @RequestParam String address,
-            @RequestParam String profileImageUrl,
             RedirectAttributes redirectAttributes
     ) {
-        userService.updateProfile(fullName, phone, address, profileImageUrl);
+        userService.updateProfile(fullName, phone, address);
 
         redirectAttributes.addFlashAttribute(
                 "success",
                 "Profil bol úspešne aktualizovaný."
         );
+
+        return "redirect:/profile";
+    }
+
+    // =========================
+    // UPLOAD AVATAR (NOVÉ)
+    // =========================
+
+    @PostMapping("/avatar")
+    public String uploadAvatar(@RequestParam("image") MultipartFile image,
+                               RedirectAttributes ra) {
+
+        try {
+            User user = userService.getCurrentUser();
+
+            String imageUrl = fileStorageService
+                    .storeProfileImage(image, user.getId());
+
+            userService.updateProfileImage(user.getId(), imageUrl);
+
+            ra.addFlashAttribute(
+                    "success",
+                    "Profilový obrázok bol aktualizovaný"
+            );
+
+        } catch (Exception e) {
+            ra.addFlashAttribute(
+                    "error",
+                    e.getMessage()
+            );
+        }
 
         return "redirect:/profile";
     }

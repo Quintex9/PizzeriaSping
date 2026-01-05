@@ -16,20 +16,38 @@
 
     <h1>Môj profil</h1>
 
-    <div th:if="${success}" class="alert success"
-         th:text="${success}"></div>
-
-    <div th:if="${error}" class="alert error"
-         th:text="${error}"></div>
-
+    <!-- FLASH SPRÁVY -->
+    <div th:if="${success}" class="alert success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert error" th:text="${error}"></div>
 
     <div class="profile-card">
 
+        <!-- AVATAR + UPLOAD -->
         <div class="profile-avatar">
-            <img th:src="${user.profileImageUrl}"
+
+            <img th:src="${user.profileImageUrl != null and !#strings.isEmpty(user.profileImageUrl)
+              ? user.profileImageUrl
+              : '/images/defaultPFP.jpg'}"
                  alt="">
+
+
+            <form th:action="@{/profile/avatar}"
+                  method="post"
+                  enctype="multipart/form-data"
+                  style="margin-top: 10px;">
+
+                <input type="file"
+                       name="image"
+                       accept="image/png,image/jpeg,image/webp"
+                       required>
+
+                <button type="submit" class="btn-secondary">
+                    Nahrať nový obrázok
+                </button>
+            </form>
         </div>
 
+        <!-- INFO -->
         <div class="profile-info">
             <p><strong>Meno:</strong> <span th:text="${user.fullName}"></span></p>
             <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
@@ -62,9 +80,7 @@
 
 </div>
 
-<footer>
-    © 2025 Pizzeria
-</footer>
+<footer>© 2025 Pizzeria</footer>
 
 </body>
 </html>
