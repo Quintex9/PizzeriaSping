@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface UserService {
 
+
     User findById(Integer id);
 
     User findByEmail(String email);
@@ -22,12 +23,15 @@ public interface UserService {
                            String newPassword,
                            String confirmPassword);
 
-
-    void deleteById(Integer id);
-
     boolean existsByEmail(String email);
 
     void assignRole(Integer userId, Integer roleId);
     void resetPassword(Integer userId, String newPassword);
 
+    void deactivate(Integer userId);
+
+
+    void activate(Integer userId);
+
+    void deleteIfFresh(Integer userId);
 }

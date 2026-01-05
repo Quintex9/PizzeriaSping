@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Pizze</title>
+    <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -21,7 +22,7 @@
         <tr>
             <th>Názov</th>
             <th>Slug</th>
-            <th>Aktívna</th>
+            <th>Stav</th>
             <th>Veľkosti</th>
             <th>Akcie</th>
         </tr>
@@ -31,20 +32,57 @@
         <tr th:each="pizza : ${pizzas}">
             <td th:text="${pizza.name}"></td>
             <td th:text="${pizza.slug}"></td>
+
+            <!-- STAV -->
             <td>
-                <span th:if="${pizza.active}">Áno</span>
-                <span th:unless="${pizza.active}">Nie</span>
+                <span th:if="${pizza.active}" class="badge badge-success">
+                    Aktívna
+                </span>
+                <span th:unless="${pizza.active}" class="badge badge-danger">
+                    Neaktívna
+                </span>
             </td>
+
             <td th:text="${#sets.size(pizza.sizes)} + ' veľkostí'"></td>
+
+            <!-- AKCIE -->
             <td class="admin-actions-cell">
-                <a th:href="@{|/admin/pizza/edit/${pizza.id}|}" class="btn-primary">Upraviť</a>
-                <form th:action="@{|/admin/pizza/delete/${pizza.id}|}"
+
+                <!-- UPRAVIŤ -->
+                <a th:href="@{|/admin/pizza/edit/${pizza.id}|}"
+                   class="btn-primary">
+                    Upraviť
+                </a>
+
+                <!-- DEAKTIVOVAŤ -->
+                <form th:if="${pizza.active}"
+                      th:action="@{|/admin/pizza/deactivate/${pizza.id}|}"
                       method="post"
                       style="display:inline;"
                       onsubmit="return confirm('Naozaj chceš deaktivovať pizzu?');">
-                    <button type="submit" class="btn-danger">Deaktivovať</button>
+                    <button type="submit" class="btn-danger">
+                        Deaktivovať
+                    </button>
                 </form>
-                <a th:href="@{|/pizza/${pizza.slug}|}" class="btn-secondary" target="_blank">Zobraziť</a>
+
+                <!-- AKTIVOVAŤ -->
+                <form th:unless="${pizza.active}"
+                      th:action="@{|/admin/pizza/activate/${pizza.id}|}"
+                      method="post"
+                      style="display:inline;"
+                      onsubmit="return confirm('Naozaj chceš aktivovať pizzu?');">
+                    <button type="submit" class="btn-success">
+                        Aktivovať
+                    </button>
+                </form>
+
+                <!-- ZOBRAZIŤ -->
+                <a th:href="@{|/pizza/${pizza.slug}|}"
+                   class="btn-secondary"
+                   >
+                    Zobraziť
+                </a>
+
             </td>
         </tr>
         </tbody>
@@ -53,4 +91,3 @@
 
 </body>
 </html>
-

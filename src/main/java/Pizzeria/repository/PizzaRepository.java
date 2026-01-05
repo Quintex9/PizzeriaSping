@@ -43,4 +43,41 @@ public interface PizzaRepository extends JpaRepository<Pizza, Integer> {
             @Param("q") String q,
             @Param("tagId") Integer tagId
     );
+
+    Optional<Pizza> findBySlugAndActiveTrue(String slug);
+
+    @Query("""
+    SELECT DISTINCT p
+    FROM Pizza p
+    WHERE p.active = true
+      AND LOWER(p.name) LIKE LOWER(CONCAT('%', :q, '%'))
+""")
+    List<Pizza> searchActiveByName(@Param("q") String q);
+
+    @Query("""
+    SELECT DISTINCT p
+    FROM Pizza p
+    JOIN p.tags t
+    WHERE p.active = true
+      AND t.id = :tagId
+""")
+    List<Pizza> findActiveByTagId(@Param("tagId") Integer tagId);
+
+    @Query("""
+    SELECT DISTINCT p
+    FROM Pizza p
+    JOIN p.tags t
+    WHERE p.active = true
+      AND t.id = :tagId
+      AND LOWER(p.name) LIKE LOWER(CONCAT('%', :q, '%'))
+""")
+    List<Pizza> searchActiveByNameAndTag(
+            @Param("q") String q,
+            @Param("tagId") Integer tagId
+    );
+
+    Optional<Pizza> findByIdAndActiveTrue(Integer id);
+
+
+
 }

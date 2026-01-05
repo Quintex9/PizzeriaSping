@@ -3,6 +3,7 @@ package Pizzeria.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,12 +41,11 @@ public class OrderServiceImpl implements OrderService {
         this.userService = userService;
     }
 
-    // ========= READ =========
-
     @Override
     public Order findById(Integer id) {
         return orderRepository.findById(id).orElse(null);
     }
+
 
     @Override
     public List<Order> findForCustomer(Integer customerId) {
@@ -84,8 +84,6 @@ public class OrderServiceImpl implements OrderService {
     public long countNewUnassignedOrders() {
         return orderRepository.countNewUnassignedOrders();
     }
-
-    // ========= CREATE =========
 
     @Override
     @Transactional
@@ -135,20 +133,53 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public void assignCook(Integer orderId) {
         Order order = findById(orderId);
-        order.setAssignedCook(userService.getCurrentUser());
+        User current = userService.getCurrentUser();
+
+        // Povolené roly
+        boolean allowed = current.hasRole("KUCHAR") || current.hasRole("ADMIN");
+        if (!allowed) {
+            throw new AccessDeniedException("Nemáte oprávnenie prijať objednávku");
+        }
+
+        // Objednávka už bola prijatá
+        if (order.getAssignedCook() != null) {
+            throw new IllegalStateException("Objednávka je už priradená");
+        }
+
+        //  ADMIN aj KUCHÁR sa zapíšu ako kuchár
+        order.setAssignedCook(current);
         order.setStatus(OrderStatus.PRIPRAVUJE_SA);
         order.setUpdatedAt(LocalDateTime.now());
+
         orderRepository.save(order);
     }
+
 
     @Override
     @Transactional
     public void markReady(Integer orderId) {
         Order order = findById(orderId);
+        User current = userService.getCurrentUser();
+
+        boolean isAdmin = current.hasRole("ADMIN");
+
+        boolean isAssignedCook =
+                order.getAssignedCook() != null &&
+                        order.getAssignedCook().getId().equals(current.getId());
+
+        if (!isAdmin && !isAssignedCook) {
+            throw new AccessDeniedException(
+                    "Objednávku môže dokončiť len ten, kto ju prijal, alebo admin"
+            );
+        }
+
         order.setStatus(OrderStatus.PRIPRAVENA);
         order.setUpdatedAt(LocalDateTime.now());
+
         orderRepository.save(order);
     }
+
+
 
     // ========= COURIER =========
 

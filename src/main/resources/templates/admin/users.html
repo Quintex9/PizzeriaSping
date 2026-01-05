@@ -12,9 +12,24 @@
 
 <div class="container">
 
-  <h1 class="page-title">
-    👤 Používatelia
-  </h1>
+  <h1 class="page-title">👤 Používatelia</h1>
+
+  <!-- CHYBOVÉ HLÁŠKY -->
+  <div th:if="${param.error != null and param.error[0] == 'has-orders'}"
+       class="alert alert-danger">
+    Používateľa nie je možné odstrániť, pretože má objednávky.
+  </div>
+
+  <div th:if="${param.error != null and param.error[0] == 'self-delete'}"
+       class="alert alert-warning">
+    Nemôžeš odstrániť vlastný účet.
+  </div>
+
+  <div th:if="${param.error != null and param.error[0] == 'self-deactivate'}"
+       class="alert alert-warning">
+    Nemôžeš deaktivovať vlastný účet.
+  </div>
+
 
   <table class="order-table">
     <thead>
@@ -22,6 +37,7 @@
       <th>Email</th>
       <th>Meno</th>
       <th>Rola</th>
+      <th>Stav</th>
       <th>Akcie</th>
     </tr>
     </thead>
@@ -31,10 +47,21 @@
       <td th:text="${user.email}"></td>
       <td th:text="${user.fullName}"></td>
 
-      <!-- ROLA -->
+      <!-- ROLY -->
       <td>
                 <span th:each="role : ${user.roles}"
-                      th:text="${role.name}">
+                      th:text="${role.name}"
+                      class="badge badge-info">
+                </span>
+      </td>
+
+      <!-- STAV -->
+      <td>
+                <span th:if="${user.enabled}" class="badge badge-success">
+                    Aktívny
+                </span>
+        <span th:if="${!user.enabled}" class="badge badge-danger">
+                    Deaktivovaný
                 </span>
       </td>
 
@@ -59,7 +86,30 @@
           </button>
         </form>
 
-        <!-- ODSTRÁNENIE POUŽÍVATEĽA -->
+        <!-- DEAKTIVOVAŤ -->
+        <form th:if="${user.enabled}"
+              th:action="@{|/admin/users/${user.id}/deactivate|}"
+              method="post"
+              class="inline-form"
+              onsubmit="return confirm('Naozaj chceš deaktivovať používateľa?');">
+
+          <button type="submit" class="btn-warning">
+            Deaktivovať
+          </button>
+        </form>
+
+        <!-- AKTIVOVAŤ -->
+        <form th:if="${!user.enabled}"
+              th:action="@{|/admin/users/${user.id}/activate|}"
+              method="post"
+              class="inline-form">
+
+          <button type="submit" class="btn-success">
+            Aktivovať
+          </button>
+        </form>
+
+        <!-- ODSTRÁNIŤ (LEN FRESH ÚČET – BACKEND TO STRÁŽI) -->
         <form th:action="@{|/admin/users/${user.id}/delete|}"
               method="post"
               class="inline-form"

@@ -2,6 +2,7 @@ package Pizzeria.service;
 
 import Pizzeria.entity.Role;
 import Pizzeria.entity.User;
+import Pizzeria.repository.OrderRepository;
 import Pizzeria.repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,12 +19,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
+    private final OrderRepository orderRepository;
 
     public UserServiceImpl(UserRepository userRepository,
-                           PasswordEncoder passwordEncoder, RoleService roleService) {
+                           PasswordEncoder passwordEncoder, RoleService roleService, OrderRepository orderRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleService = roleService;
+        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -48,11 +51,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-
-    // =========================
-    // BASIC CRUD
-    // =========================
-
     @Override
     public User findById(Integer id) {
         return userRepository.findById(id).orElse(null);
@@ -73,10 +71,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-    @Override
-    public void deleteById(Integer id) {
-        userRepository.deleteById(id);
-    }
 
     @Override
     public boolean existsByEmail(String email) {
@@ -99,10 +93,6 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    // =========================
-    // PROFILE UPDATE
-    // =========================
-
     @Override
     @Transactional
     public void updateProfile(String fullName,
@@ -120,10 +110,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    // =========================
-    // PASSWORD CHANGE
-    // =========================
-
     @Override
     @Transactional
     public boolean changePassword(String currentPassword,
@@ -132,20 +118,53 @@ public class UserServiceImpl implements UserService {
 
         User user = getCurrentUser();
 
-        // 1️⃣ kontrola starého hesla
+        // kontrola starého hesla
         if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
             return false;
         }
 
-        // 2️⃣ nové heslá sa musia zhodovať
+        //  nové heslá sa musia zhodovať
         if (!newPassword.equals(confirmPassword)) {
             return false;
         }
 
-        // 3️⃣ zakódovanie a uloženie nového hesla
+        //  zakódovanie a uloženie nového hesla
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
 
         return true;
+    }
+
+    @Override
+    @Transactional
+    public void deactivate(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        user.setEnabled(false);
+        userRepository.save(user);
+    }
+
+
+    @Override
+    @Transactional
+    public void activate(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        user.setEnabled(true);
+        userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void deleteIfFresh(Integer userId) {
+        long ordersCount = orderRepository.countByUserId(userId);
+
+        if (ordersCount > 0) {
+            throw new IllegalStateException("Používateľ má objednávky");
+        }
+
+        userRepository.deleteById(userId);
     }
 }

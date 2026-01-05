@@ -27,10 +27,16 @@ public class CartController {
     @PostMapping("/add")
     public String addToCart(@RequestParam Integer pizzaId,
                             @RequestParam Integer sizeId,
-                            @RequestParam String redirect) {
+                            @RequestHeader(value = "Referer", required = false) String referer) {
 
-        Pizza pizza = pizzaService.findById(pizzaId);
+        Pizza pizza = pizzaService.findActiveById(pizzaId)
+                .orElseThrow(() -> new IllegalStateException("Pizza nie je dostupná"));
+
         PizzaSize size = sizeService.findById(sizeId);
+
+        if (!size.getPizza().getId().equals(pizza.getId())) {
+            throw new IllegalStateException("Veľkosť nepatrí k pizzi");
+        }
 
         CartItem item = new CartItem(
                 pizza.getId(),
@@ -41,8 +47,12 @@ public class CartController {
         );
 
         cartService.addItem(item);
-        return "redirect:" + redirect;
+
+        // 🟢 vráť sa tam, kde bol používateľ
+        return "redirect:" + (referer != null ? referer : "/pizza");
     }
+
+
 
     @GetMapping
     public String showCart(Model model) {

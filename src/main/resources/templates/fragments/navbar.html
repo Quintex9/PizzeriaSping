@@ -30,7 +30,7 @@
 
         <!--  KUCHÁR -->
         <a th:href="@{/kuchar/orders}"
-           sec:authorize="hasRole('KUCHAR')"
+           sec:authorize="hasAnyRole('KUCHAR','ADMIN')"
            th:classappend="${active == 'cook'} ? 'active'"
            th:with="newCount=${newOrdersCount != null ? newOrdersCount : 0}">
             Kuchár

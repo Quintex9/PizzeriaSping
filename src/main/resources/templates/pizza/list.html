@@ -38,12 +38,15 @@
 
     <div class="pizza-grid">
 
-        <div class="pizza-card" th:each="pizza : ${pizzas}">
+        <div class="pizza-card"
+             th:each="pizza : ${pizzas}"
+             th:id="'pizza-' + ${pizza.id}">
+
             <img th:src="${pizza.imageUrl}" alt="Pizza obrázok">
 
             <h3 th:text="${pizza.name}">Názov pizze</h3>
             <p th:text="${pizza.description}">Popis pizze</p>
-            
+
             <a th:href="@{|/pizza/${pizza.slug}|}" class="btn-primary">
                 Detail
             </a>
@@ -54,11 +57,13 @@
                     <strong th:text="${size.sizeLabel}">M</strong>:
                     <span th:text="${size.price + ' €'}"></span>
 
+                    <!-- PRIDAŤ DO KOŠÍKA -->
                     <form th:action="@{/cart/add}" method="post" style="display:inline;">
                         <input type="hidden" name="pizzaId" th:value="${pizza.id}">
                         <input type="hidden" name="sizeId" th:value="${size.id}">
-                        <input type="hidden" name="redirect" th:value="${redirect}">
-                        <button type="submit" class="add-cart-btn">Pridať</button>
+                        <button type="submit" class="add-cart-btn">
+                            Pridať
+                        </button>
                     </form>
                 </div>
             </div>
@@ -72,6 +77,23 @@
 <footer>
     © 2025 Pizzeria — všetky práva vyhradené
 </footer>
+
+<!--SCROLL PERSISTENCIA -->
+<script>
+    // po návrate na stránku obnov scroll
+    document.addEventListener("DOMContentLoaded", () => {
+        const y = sessionStorage.getItem("scrollY");
+        if (y !== null) {
+            window.scrollTo(0, parseInt(y, 10));
+            sessionStorage.removeItem("scrollY");
+        }
+    });
+
+    // pred odoslaním formulára uložíme scroll
+    document.addEventListener("submit", () => {
+        sessionStorage.setItem("scrollY", window.scrollY);
+    });
+</script>
 
 </body>
 </html>

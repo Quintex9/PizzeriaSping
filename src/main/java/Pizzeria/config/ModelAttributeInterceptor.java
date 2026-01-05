@@ -33,14 +33,15 @@ public class ModelAttributeInterceptor implements HandlerInterceptor {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         
         if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {
-            boolean isCook = auth.getAuthorities().stream()
+            boolean isCookOrAdmin = auth.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
-                    .anyMatch(a -> a.equals("ROLE_KUCHAR"));
-            
-            if (isCook) {
+                    .anyMatch(a -> a.equals("ROLE_KUCHAR") || a.equals("ROLE_ADMIN"));
+
+            if (isCookOrAdmin) {
                 long newOrdersCount = orderService.countNewUnassignedOrders();
                 modelAndView.addObject("newOrdersCount", newOrdersCount);
             }
+
         }
     }
 }

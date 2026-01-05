@@ -1,6 +1,7 @@
 package Pizzeria.service;
 
 import Pizzeria.entity.Order;
+import Pizzeria.entity.User;
 
 import java.util.List;
 

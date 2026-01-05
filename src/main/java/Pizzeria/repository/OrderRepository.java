@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
-    // 👨‍🍳 KUCHÁR – nové nepriradené + pripravované aktuálnym kuchárom
+    //  KUCHÁR – nové nepriradené + pripravované aktuálnym kuchárom
     @Query("""
         SELECT DISTINCT o
         FROM Order o
@@ -20,7 +20,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     """)
     List<Order> findForCookWithInProgress(@Param("cookId") Integer cookId);
 
-    // 🚗 KURIÉR – pripravené nepriradené + doručované aktuálnym kuriérom
+    // KURIÉR – pripravené nepriradené + doručované aktuálnym kuriérom
     @Query("""
         SELECT DISTINCT o
         FROM Order o
@@ -31,7 +31,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     """)
     List<Order> findForCourierWithInProgress(@Param("courierId") Integer courierId);
 
-    // 👤 ZÁKAZNÍK – jeho objednávky s položkami
+    // ZÁKAZNÍK – jeho objednávky s položkami
     @Query("""
         SELECT DISTINCT o
         FROM Order o
@@ -47,4 +47,11 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
         WHERE o.status = 'NEW' AND o.assignedCook IS NULL
     """)
     long countNewUnassignedOrders();
+
+    @Query("""
+    SELECT COUNT(o)
+    FROM Order o
+    WHERE o.customer.id = :userId
+""")
+    long countByUserId(@Param("userId") Integer userId);
 }

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PizzaServiceImpl implements PizzaService {
@@ -36,48 +37,63 @@ public class PizzaServiceImpl implements PizzaService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<Pizza> search(String q, Integer tagId) {
-
-        boolean hasQuery = q != null && !q.isBlank();
-        boolean hasTag = tagId != null;
-
-        if (!hasQuery && !hasTag) {
-            return pizzaRepository.findAll();
-        }
-
-        if (hasQuery && hasTag) {
-            return pizzaRepository.searchByNameAndTag(q, tagId);
-        }
-
-        if (hasTag) {
-            return pizzaRepository.findByTagId(tagId);
-        }
-
-        return pizzaRepository.searchByName(q);
-    }
-
-    @Override
     @Transactional
     public Pizza save(Pizza pizza) {
         return pizzaRepository.save(pizza);
     }
 
     @Override
-    @Transactional
-    public void deactivate(Integer id) {
-        Pizza pizza = pizzaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pizza not found"));
-
-        pizza.setActive(false);
-        pizza.setUpdatedAt(LocalDateTime.now());
-    }
-
-
-    @Override
     @Transactional(readOnly = true)
     public List<Pizza> findAll() {
         return pizzaRepository.findAll();
     }
+
+    @Transactional
+    public void deactivate(Integer id) {
+        Pizza pizza = findById(id);
+        pizza.setActive(false);
+    }
+
+    @Transactional
+    public void activate(Integer id) {
+        Pizza pizza = findById(id);
+        pizza.setActive(true);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Pizza> findActiveById(Integer id) {
+        return pizzaRepository.findByIdAndActiveTrue(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Pizza> findActiveBySlug(String slug) {
+        return pizzaRepository.findBySlugAndActiveTrue(slug);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Pizza> searchActive(String q, Integer tagId) {
+
+        boolean hasQuery = q != null && !q.isBlank();
+        boolean hasTag = tagId != null;
+
+        if (!hasQuery && !hasTag) {
+            return pizzaRepository.findByActiveTrue();
+        }
+
+        if (hasQuery && hasTag) {
+            return pizzaRepository.searchActiveByNameAndTag(q, tagId);
+        }
+
+        if (hasTag) {
+            return pizzaRepository.findActiveByTagId(tagId);
+        }
+
+        return pizzaRepository.searchActiveByName(q);
+    }
+
+
 
 }

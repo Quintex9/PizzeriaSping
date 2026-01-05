@@ -75,6 +75,27 @@ public class AdminController {
 
     // ================= USERS =================
 
+    // DEAKTIVOVAŤ (SOFT DELETE)
+    @PostMapping("/users/{id}/deactivate")
+    public String deactivateUser(@PathVariable Integer id) {
+
+        User current = userService.getCurrentUser();
+        if (current.getId().equals(id)) {
+            return "redirect:/admin/users?error=self-deactivate";
+        }
+
+        userService.deactivate(id);
+        return "redirect:/admin/users";
+    }
+
+    // AKTIVOVAŤ
+    @PostMapping("/users/{id}/activate")
+    public String activateUser(@PathVariable Integer id) {
+        userService.activate(id);
+        return "redirect:/admin/users";
+    }
+
+    // ODSTRÁNIŤ – LEN FRESH ÚČET
     @PostMapping("/users/{id}/delete")
     public String deleteUser(@PathVariable Integer id) {
 
@@ -83,7 +104,12 @@ public class AdminController {
             return "redirect:/admin/users?error=self-delete";
         }
 
-        userService.deleteById(id);
+        try {
+            userService.deleteIfFresh(id);
+        } catch (IllegalStateException e) {
+            return "redirect:/admin/users?error=has-orders";
+        }
+
         return "redirect:/admin/users";
     }
 
@@ -259,6 +285,19 @@ public class AdminController {
         pizzaService.deactivate(id);
         return "redirect:/admin/pizza";
     }
+
+    @PostMapping("/pizza/deactivate/{id}")
+    public String deactivatePizza(@PathVariable Integer id) {
+        pizzaService.deactivate(id);
+        return "redirect:/admin/pizza";
+    }
+
+    @PostMapping("/pizza/activate/{id}")
+    public String activatePizza(@PathVariable Integer id) {
+        pizzaService.activate(id);
+        return "redirect:/admin/pizza";
+    }
+
 
     // ================= INGREDIENTS =================
 

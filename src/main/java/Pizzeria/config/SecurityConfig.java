@@ -45,7 +45,7 @@ public class SecurityConfig {
                         // PROFIL, KOŠÍK, OBJEDNÁVKY – len prihlásený používateľ
                         .requestMatchers("/profile/**", "/cart/**", "/order/**").authenticated()
 
-                        .requestMatchers("/kuchar/**").hasRole("KUCHAR")
+                        .requestMatchers("/kuchar/**").hasAnyRole("KUCHAR", "ADMIN")
                         .requestMatchers("/kurier/**").hasRole("KURIER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
 

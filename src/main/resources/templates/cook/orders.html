@@ -10,7 +10,7 @@
 <div th:replace="~{fragments/navbar :: navbar('')}"></div>
 
 <div class="container">
-  <h1>👨‍🍳 Objednávky na prípravu</h1>
+  <h1>Objednávky na prípravu</h1>
 
   <div th:if="${newOrdersCount != null && newOrdersCount > 0}" class="alert alert-info">
     <strong>🔔 Nová objednávka!</strong> Máte <span th:text="${newOrdersCount}"></span> 
@@ -39,7 +39,7 @@
 
       <td th:text="${order.deliveryAddress}"></td>
 
-      <!-- 📦 OBSAH OBJEDNÁVKY -->
+      <!--OBSAH OBJEDNÁVKY -->
       <td>
         <ul class="order-items">
           <li th:each="item : ${order.items}">

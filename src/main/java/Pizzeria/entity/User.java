@@ -157,5 +157,15 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+    public boolean hasRole(String roleName) {
+        if (roles == null || roleName == null) {
+            return false;
+        }
+
+        return roles.stream()
+                .anyMatch(role -> role.getName().equals("ROLE_" + roleName));
+    }
+
 }
 
