@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="sk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Upraviť veľkosť pizze</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<div th:replace="fragments/navbar :: navbar('home')"></div>
+<body>
+
+<h1>Upraviť veľkosť pizze</h1>
+
+<div class="form-box">
+    <form th:action="@{/admin/pizza-sizes/{id}(id=${pizzaSize.id})}"
+          method="post">
+
+        <div class="form-group">
+            <label>Pizza</label>
+            <select name="pizzaId" required>
+                <option th:each="pizza : ${pizzas}"
+                        th:value="${pizza.id}"
+                        th:text="${pizza.name}"
+                        th:selected="${pizza.id == pizzaSize.pizza.id}">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Veľkosť</label>
+            <input type="text"
+                   name="sizeLabel"
+                   th:value="${pizzaSize.sizeLabel}"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label>Priemer (cm)</label>
+            <input type="number"
+                   name="diameterCm"
+                   th:value="${pizzaSize.diameterCm}"
+                   min="1"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label>Cena (€)</label>
+            <input type="number"
+                   name="price"
+                   step="0.01"
+                   min="0"
+                   th:value="${pizzaSize.price}"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input type="checkbox"
+                       name="active"
+                       th:checked="${pizzaSize.active}">
+                Aktívna
+            </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">💾 Uložiť zmeny</button>
+        <a th:href="@{/admin/pizza-sizes}" class="btn btn-secondary">Späť</a>
+
+    </form>
+</div>
+
+</body>
+</html>

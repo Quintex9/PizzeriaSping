@@ -4,8 +4,6 @@ CREATE DATABASE pizzeria CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 USE pizzeria;
 
-
-
 CREATE TABLE users(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(100) NOT NULL UNIQUE,
@@ -19,15 +17,11 @@ CREATE TABLE users(
     updated_at DATETIME NOT NULL
 );
 
-
-
 CREATE TABLE roles(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE,
     description VARCHAR(255)
 );
-
-
 
 CREATE TABLE user_roles(
     user_id BIGINT NOT NULL,
@@ -36,8 +30,6 @@ CREATE TABLE user_roles(
     CONSTRAINT fk_user_roles_user FOREIGN KEY(user_id) REFERENCES users(id),
     CONSTRAINT fk_user_roles_role FOREIGN KEY(role_id) REFERENCES roles(id)
 );
-
-
 
 CREATE TABLE pizzas(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -50,8 +42,6 @@ CREATE TABLE pizzas(
     updated_at DATETIME NOT NULL
 );
 
-
-
 CREATE TABLE pizza_sizes(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     pizza_id BIGINT NOT NULL,
@@ -62,8 +52,6 @@ CREATE TABLE pizza_sizes(
     CONSTRAINT fk_sizes_pizza FOREIGN KEY(pizza_id) REFERENCES pizzas(id)
 );
 
-
-
 CREATE TABLE ingredients(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -73,8 +61,6 @@ CREATE TABLE ingredients(
     active BOOLEAN DEFAULT TRUE
 );
 
-
-
 CREATE TABLE pizza_ingredients(
     pizza_id BIGINT NOT NULL,
     ingredient_id BIGINT NOT NULL,
@@ -83,16 +69,12 @@ CREATE TABLE pizza_ingredients(
     CONSTRAINT fk_pi_ingredient FOREIGN KEY(ingredient_id) REFERENCES ingredients(id)
 );
 
-
-
 CREATE TABLE tags(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     slug VARCHAR(60) NOT NULL UNIQUE,
     description VARCHAR(255)
 );
-
-
 
 CREATE TABLE pizza_tags(
     pizza_id BIGINT NOT NULL,
@@ -101,8 +83,6 @@ CREATE TABLE pizza_tags(
     CONSTRAINT fk_pt_pizza FOREIGN KEY(pizza_id) REFERENCES pizzas(id),
     CONSTRAINT fk_pt_tag FOREIGN KEY(tag_id) REFERENCES tags(id)
 );
-
-
 
 CREATE TABLE orders(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -120,8 +100,6 @@ CREATE TABLE orders(
     CONSTRAINT fk_orders_cook FOREIGN KEY(assigned_cook_id) REFERENCES users(id),
     CONSTRAINT fk_orders_courier FOREIGN KEY(assigned_courier_id) REFERENCES users(id)
 );
-
-
 
 CREATE TABLE order_items(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,

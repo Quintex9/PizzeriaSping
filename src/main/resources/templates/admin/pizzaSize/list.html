@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="sk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Veľkosti pizze</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<div th:replace="fragments/navbar :: navbar('home')"></div>
+<body>
+
+<h1>Veľkosti pizze</h1>
+
+<a th:href="@{/admin/pizza-sizes/create}" class="btn btn-success">
+    ➕ Pridať veľkosť
+</a>
+
+<br><br>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Pizza</th>
+        <th>Veľkosť</th>
+        <th>Priemer</th>
+        <th>Cena</th>
+        <th>Stav</th>
+        <th>Akcie</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="size : ${pizzaSizes}">
+        <td th:text="${size.pizza.name}">Margarita</td>
+        <td th:text="${size.sizeLabel}">M</td>
+        <td th:text="${size.diameterCm + ' cm'}">26 cm</td>
+        <td th:text="${size.price + ' €'}">6.50 €</td>
+        <td>
+            <span th:if="${size.active}" class="badge badge-active">Aktívna</span>
+            <span th:unless="${size.active}" class="badge badge-inactive">Neaktívna</span>
+        </td>
+        <td class="actions">
+            <a th:href="@{/admin/pizza-sizes/{id}/edit(id=${size.id})}"
+               class="btn btn-warning">✏️</a>
+
+            <form th:action="@{/admin/pizza-sizes/{id}/delete(id=${size.id})}"
+                  method="post"
+                  onsubmit="return confirm('Naozaj chcete odstrániť túto veľkosť?');">
+                <button type="submit" class="btn btn-danger">🗑️</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

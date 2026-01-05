@@ -3,10 +3,12 @@ package Pizzeria.service;
 import Pizzeria.entity.PizzaSize;
 import Pizzeria.repository.PizzaSizeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class PizzaSizeServiceImpl implements PizzaSizeService {
 
     private final PizzaSizeRepository pizzaSizeRepository;
@@ -21,13 +23,18 @@ public class PizzaSizeServiceImpl implements PizzaSizeService {
     }
 
     @Override
+    public List<PizzaSize> findAll() {
+        return pizzaSizeRepository.findAll();
+    }
+
+    @Override
     public List<PizzaSize> findByPizza(Integer pizzaId) {
         return pizzaSizeRepository.findByPizzaId(pizzaId);
     }
 
     @Override
-    public PizzaSize save(PizzaSize size) {
-        return pizzaSizeRepository.save(size);
+    public PizzaSize save(PizzaSize pizzaSize) {
+        return pizzaSizeRepository.save(pizzaSize);
     }
 
     @Override

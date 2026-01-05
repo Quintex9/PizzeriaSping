@@ -26,19 +26,21 @@ public class OrderServiceImpl implements OrderService {
     private final PizzaSizeRepository pizzaSizeRepository;
     private final CartService cartService;
     private final UserService userService;
+    private final EmailService emailService;
 
     public OrderServiceImpl(
             OrderRepository orderRepository,
             OrderItemRepository orderItemRepository,
             PizzaSizeRepository pizzaSizeRepository,
             CartService cartService,
-            UserService userService
+            UserService userService, EmailService emailService
     ) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.pizzaSizeRepository = pizzaSizeRepository;
         this.cartService = cartService;
         this.userService = userService;
+        this.emailService = emailService;
     }
 
     @Override
@@ -114,18 +116,25 @@ public class OrderServiceImpl implements OrderService {
             oi.setQuantity(item.getQuantity());
             oi.setUnitPrice(item.getPrice());
 
-            // SNAPSHOTY – HISTÓRIA
+            // SNAPSHOTY
             oi.setPizzaNameSnapshot(item.getPizzaName());
             oi.setSizeLabelSnapshot(item.getSizeLabel());
             oi.setImageUrlSnapshot(pizzaSize.getPizza().getImageUrl());
 
             orderItemRepository.save(oi);
+            order.getItems().add(oi);
+
         }
+
+        // EMAIL NOTIFIKÁCIA
+        emailService.sendOrderConfirmation(order);
+
 
         cartService.clear();
 
         return order;
     }
+
 
     // ========= COOK =========
 

@@ -8,4 +8,7 @@ import java.util.List;
 public interface PizzaSizeRepository extends JpaRepository<PizzaSize, Integer> {
 
     List<PizzaSize> findByPizzaId(Integer pizzaId);
+
+    List<PizzaSize> findAll();
+
 }

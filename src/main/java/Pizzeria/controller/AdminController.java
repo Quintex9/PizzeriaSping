@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import Pizzeria.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,12 +22,6 @@ import Pizzeria.entity.Pizza;
 import Pizzeria.entity.PizzaSize;
 import Pizzeria.entity.Tag;
 import Pizzeria.entity.User;
-import Pizzeria.service.IngredientService;
-import Pizzeria.service.OrderService;
-import Pizzeria.service.PizzaService;
-import Pizzeria.service.RoleService;
-import Pizzeria.service.TagService;
-import Pizzeria.service.UserService;
 import jakarta.validation.Valid;
 
 @Controller
@@ -39,19 +34,22 @@ public class AdminController {
     private final PizzaService pizzaService;
     private final IngredientService ingredientService;
     private final TagService tagService;
+    private final PizzaSizeService pizzaSizeService;
+
 
     public AdminController(UserService userService,
                            RoleService roleService,
                            OrderService orderService,
                            PizzaService pizzaService,
                            IngredientService ingredientService,
-                           TagService tagService) {
+                           TagService tagService, PizzaSizeService pizzaSizeService) {
         this.userService = userService;
         this.roleService = roleService;
         this.orderService = orderService;
         this.pizzaService = pizzaService;
         this.ingredientService = ingredientService;
         this.tagService = tagService;
+        this.pizzaSizeService = pizzaSizeService;
     }
 
     private String generateSlug(String text) {
@@ -422,4 +420,87 @@ public class AdminController {
         tagService.deleteById(id);
         return "redirect:/admin/tag";
     }
+
+    @GetMapping("/pizza-sizes")
+    public String pizzaSizeList(Model model) {
+        model.addAttribute("pizzaSizes", pizzaSizeService.findAll());
+        return "admin/pizzaSize/list";
+    }
+
+    @GetMapping("/pizza-sizes/create")
+    public String pizzaSizeCreateForm(Model model) {
+        model.addAttribute("pizzaSize", new PizzaSize());
+        model.addAttribute("pizzas", pizzaService.findAll());
+        return "admin/pizzaSize/create";
+    }
+
+    @PostMapping("/pizza-sizes")
+    public String pizzaSizeCreate(@RequestParam Integer pizzaId,
+                                  @RequestParam String sizeLabel,
+                                  @RequestParam int diameterCm,
+                                  @RequestParam double price,
+                                  @RequestParam(required = false) Boolean active) {
+
+        Pizza pizza = pizzaService.findById(pizzaId);
+        if (pizza == null) {
+            return "redirect:/admin/pizza-sizes";
+        }
+
+        PizzaSize size = new PizzaSize();
+        size.setPizza(pizza);
+        size.setSizeLabel(sizeLabel);
+        size.setDiameterCm(diameterCm);
+        size.setPrice(price);
+        size.setActive(active != null && active);
+
+        pizzaSizeService.save(size);
+        return "redirect:/admin/pizza-sizes";
+    }
+
+    @GetMapping("/pizza-sizes/{id}/edit")
+    public String pizzaSizeEditForm(@PathVariable Integer id, Model model) {
+
+        PizzaSize size = pizzaSizeService.findById(id);
+        if (size == null) {
+            return "redirect:/admin/pizza-sizes";
+        }
+
+        model.addAttribute("pizzaSize", size);
+        model.addAttribute("pizzas", pizzaService.findAll());
+        return "admin/pizzaSize/edit";
+    }
+    @PostMapping("/pizza-sizes/{id}")
+    public String pizzaSizeEdit(@PathVariable Integer id,
+                                @RequestParam Integer pizzaId,
+                                @RequestParam String sizeLabel,
+                                @RequestParam int diameterCm,
+                                @RequestParam double price,
+                                @RequestParam(required = false) Boolean active) {
+
+        PizzaSize size = pizzaSizeService.findById(id);
+        if (size == null) {
+            return "redirect:/admin/pizza-sizes";
+        }
+
+        Pizza pizza = pizzaService.findById(pizzaId);
+        if (pizza == null) {
+            return "redirect:/admin/pizza-sizes";
+        }
+
+        size.setPizza(pizza);
+        size.setSizeLabel(sizeLabel);
+        size.setDiameterCm(diameterCm);
+        size.setPrice(price);
+        size.setActive(active != null && active);
+
+        pizzaSizeService.save(size);
+        return "redirect:/admin/pizza-sizes";
+    }
+    @PostMapping("/pizza-sizes/{id}/delete")
+    public String pizzaSizeDelete(@PathVariable Integer id) {
+        pizzaSizeService.deleteById(id);
+        return "redirect:/admin/pizza-sizes";
+    }
+
+
 }

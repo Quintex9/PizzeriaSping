@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="sk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pridať veľkosť pizze</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+
+<div th:replace="fragments/navbar :: navbar('home')"></div>
+<body>
+
+<h1>Pridať veľkosť pizze</h1>
+
+<div class="form-box">
+    <form th:action="@{/admin/pizza-sizes}" method="post">
+
+        <div class="form-group">
+            <label>Pizza</label>
+            <select name="pizzaId" required>
+                <option value="">-- vyber pizzu --</option>
+                <option th:each="pizza : ${pizzas}"
+                        th:value="${pizza.id}"
+                        th:text="${pizza.name}">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Veľkosť (M / L / XL)</label>
+            <input type="text" name="sizeLabel" required>
+        </div>
+
+        <div class="form-group">
+            <label>Priemer (cm)</label>
+            <input type="number" name="diameterCm" min="1" required>
+        </div>
+
+        <div class="form-group">
+            <label>Cena (€)</label>
+            <input type="number" name="price" step="0.01" min="0" required>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input type="checkbox" name="active" checked>
+                Aktívna
+            </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">💾 Uložiť</button>
+        <a th:href="@{/admin/pizza-sizes}" class="btn btn-secondary">Späť</a>
+
+    </form>
+</div>
+
+</body>
+</html>
