@@ -1,6 +1,9 @@
 package Pizzeria.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "ingredients")
@@ -10,15 +13,19 @@ public class Ingredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank(message = "Názov je povinný")
+    @Size(max = 100, message = "Názov môže mať maximálne 100 znakov")
     @Column(nullable = false, length = 100)
     private String name;
 
+    @Size(max = 120, message = "Slug môže mať maximálne 120 znakov")
     @Column(length = 120, unique = true)
     private String slug;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Min(value = 0, message = "Cena nemôže byť záporná")
     @Column(name = "extra_price", nullable = false)
     private double extraPrice;
 

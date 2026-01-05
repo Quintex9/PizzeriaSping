@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Objednávka úspešná</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar('')"></div>
+
+<div class="container">
+
+    <h1>🎉 Objednávka úspešná</h1>
+
+    <div class="order-success-box">
+        <p>Ďakujeme za Vašu objednávku.</p>
+
+        <p>
+            <strong>Kód objednávky:</strong>
+            <span th:text="${order.code}"></span>
+        </p>
+
+        <p>
+            <strong>Celková cena:</strong>
+            <span th:text="${order.totalPrice} + ' €'"></span>
+        </p>
+
+        <p>
+            <strong>Stav:</strong>
+
+            <span class="order-status"
+                  th:switch="${order.status.name()}">
+
+        <span th:case="'NEW'">Nová objednávka</span>
+        <span th:case="'PRIPRAVUJE_SA'">Pripravuje sa</span>
+        <span th:case="'PRIPRAVENA'">Pripravená</span>
+        <span th:case="'DORUCUJE_SA'">Doručuje sa</span>
+        <span th:case="'DORUCENA'">Doručená</span>
+        <span th:case="'ZRUSENA'">Zrušená</span>
+
+        <span th:case="*">❓ Neznámy stav</span>
+
+    </span>
+        </p>
+
+
+        <a th:href="@{/}" class="btn-primary">
+            Späť na hlavnú stránku
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

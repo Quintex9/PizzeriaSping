@@ -1,12 +1,13 @@
 package Pizzeria.service;
 
 import Pizzeria.entity.Pizza;
-
 import java.util.List;
 
 public interface PizzaService {
 
     Pizza findById(Integer id);
+    
+    Pizza findByIdWithSizes(Integer id);
 
     Pizza findBySlug(String slug);
 
@@ -16,5 +17,6 @@ public interface PizzaService {
 
     Pizza save(Pizza pizza);
 
-    void deleteById(Integer id);
+    void deactivate(Integer id);
+
 }

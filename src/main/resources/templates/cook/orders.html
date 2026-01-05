@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Kuchár – objednávky</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar('')}"></div>
+
+<div class="container">
+  <h1>👨‍🍳 Objednávky na prípravu</h1>
+
+  <div th:if="${newOrdersCount != null && newOrdersCount > 0}" class="alert alert-info">
+    <strong>🔔 Nová objednávka!</strong> Máte <span th:text="${newOrdersCount}"></span> 
+    <span th:text="${newOrdersCount == 1 ? 'novú objednávku' : 'nové objednávky'}"></span> na prípravu.
+  </div>
+
+  <div th:if="${orders.isEmpty()}" class="empty-box">
+    <p>Momentálne nie sú žiadne nové objednávky.</p>
+  </div>
+
+  <table th:if="${!orders.isEmpty()}" class="order-table">
+    <thead>
+    <tr>
+      <th>Kód</th>
+      <th>Adresa</th>
+      <th>Obsah objednávky</th>
+      <th>Cena</th>
+      <th>Stav</th>
+      <th>Akcia</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="order : ${orders}">
+      <td th:text="${order.code}"></td>
+
+      <td th:text="${order.deliveryAddress}"></td>
+
+      <!-- 📦 OBSAH OBJEDNÁVKY -->
+      <td>
+        <ul class="order-items">
+          <li th:each="item : ${order.items}">
+            <strong th:text="${item.quantity} + '×'"></strong>
+            <span th:text="${item.pizzaNameSnapshot}"></span>
+            <span th:text="'(' + ${item.sizeLabelSnapshot} + ')'"></span>
+          </li>
+        </ul>
+      </td>
+
+      <td th:text="${order.totalPrice} + ' €'"></td>
+
+      <td th:text="${order.status.name()}"></td>
+
+      <td>
+        <!-- NEW -->
+        <form th:if="${order.status.name() == 'NEW'}"
+              th:action="@{|/kuchar/orders/${order.id}/prepare|}"
+              method="post">
+          <button class="btn-primary">Začať prípravu</button>
+        </form>
+
+        <!-- PRIPRAVUJE_SA -->
+        <form th:if="${order.status.name() == 'PRIPRAVUJE_SA'}"
+              th:action="@{|/kuchar/orders/${order.id}/ready|}"
+              method="post">
+          <button class="btn-success">Dokončiť prípravu</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

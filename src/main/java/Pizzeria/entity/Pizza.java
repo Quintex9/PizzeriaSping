@@ -1,6 +1,8 @@
 package Pizzeria.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,6 +15,8 @@ public class Pizza {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank(message = "Názov je povinný")
+    @Size(max = 100, message = "Názov môže mať maximálne 100 znakov")
     @Column(nullable = false, length = 100)
     private String name;
 
@@ -22,6 +26,7 @@ public class Pizza {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Size(max = 255, message = "URL obrázka môže mať maximálne 255 znakov")
     @Column(name = "image_url", length = 255)
     private String imageUrl;
 
@@ -34,7 +39,7 @@ public class Pizza {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "pizza", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pizza", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("sizeLabel ASC")
     private Set<PizzaSize> sizes = new HashSet<>();
 
@@ -121,6 +126,13 @@ public class Pizza {
         this.sizes = sizes;
     }
 
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
 
 }
 

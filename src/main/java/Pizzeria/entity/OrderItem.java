@@ -36,6 +36,8 @@ public class OrderItem {
     @Column(name = "image_url_snapshot", length = 255)
     private String imageUrlSnapshot;
 
+
+
     public OrderItem() {}
 
 

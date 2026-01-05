@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Tagy</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar('')"></div>
+
+<div class="container">
+    <h1 class="page-title">🏷️ Tagy</h1>
+
+    <div style="margin-bottom: 20px;">
+        <a th:href="@{/admin/tag/add}" class="btn-primary">+ Pridať tag</a>
+        <a th:href="@{/admin}" class="btn-secondary" style="margin-left: 10px;">← Späť</a>
+    </div>
+
+    <table class="order-table">
+        <thead>
+        <tr>
+            <th>Názov</th>
+            <th>Slug</th>
+            <th>Popis</th>
+            <th>Akcie</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="tag : ${tags}">
+            <td th:text="${tag.name}"></td>
+            <td th:text="${tag.slug}"></td>
+            <td th:text="${tag.description}"></td>
+            <td class="admin-actions-cell">
+                <a th:href="@{|/admin/tag/edit/${tag.id}|}" class="btn-primary">Upraviť</a>
+                <form th:action="@{|/admin/tag/delete/${tag.id}|}"
+                      method="post"
+                      style="display:inline;"
+                      onsubmit="return confirm('Naozaj chceš odstrániť tag?');">
+                    <button type="submit" class="btn-danger">Zmazať</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
+

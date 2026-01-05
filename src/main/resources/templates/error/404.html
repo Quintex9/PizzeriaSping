@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>404 - Stránka nenájdená</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar('')"></div>
+
+<div class="container">
+    <div class="error-page">
+        <h1>404</h1>
+        <h2>Stránka nenájdená</h2>
+        <p>Ľutujeme, ale požadovaná stránka neexistuje.</p>
+        <a th:href="@{/}" class="btn-primary">Späť na hlavnú stránku</a>
+    </div>
+</div>
+
+</body>
+</html>
+

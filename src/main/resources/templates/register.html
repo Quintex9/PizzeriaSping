@@ -22,18 +22,33 @@
 
         <label>Meno a priezvisko:</label>
         <input type="text" th:field="*{fullName}" required>
+        <span th:if="${#fields.hasErrors('fullName')}" 
+              th:errors="*{fullName}" 
+              class="error-message"></span>
 
         <label>Email:</label>
         <input type="email" th:field="*{email}" required>
+        <span th:if="${#fields.hasErrors('email')}" 
+              th:errors="*{email}" 
+              class="error-message"></span>
 
-        <label>Heslo:</label>
+        <label>Heslo (min. 8 znakov, aspoň jedno písmeno a jedno číslo):</label>
         <input type="password" th:field="*{password}" required>
+        <span th:if="${#fields.hasErrors('password')}" 
+              th:errors="*{password}" 
+              class="error-message"></span>
 
-        <label>Telefón:</label>
-        <input type="text" th:field="*{phone}">
+        <label>Telefón (formát: 0944 121 302):</label>
+        <input type="text" th:field="*{phone}" placeholder="0944 121 302" pattern="0[0-9]{3} [0-9]{3} [0-9]{3}">
+        <span th:if="${#fields.hasErrors('phone')}" 
+              th:errors="*{phone}" 
+              class="error-message"></span>
 
         <label>Adresa:</label>
         <input type="text" th:field="*{address}">
+        <span th:if="${#fields.hasErrors('address')}" 
+              th:errors="*{address}" 
+              class="error-message"></span>
 
         <button type="submit" class="btn-primary">Registrovať</button>
     </form>

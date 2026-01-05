@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Kuriér – objednávky</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar('')"></div>
+
+<div class="container">
+    <h1>🚗 Objednávky na doručenie</h1>
+
+    <div th:if="${orders.isEmpty()}" class="empty-box">
+        <p>Momentálne nie sú žiadne objednávky na doručenie.</p>
+    </div>
+
+    <table th:if="${!orders.isEmpty()}" class="order-table">
+        <thead>
+        <tr>
+            <th>Kód</th>
+            <th>Adresa</th>
+            <th>Cena</th>
+            <th>Stav</th>
+            <th>Akcia</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.code}"></td>
+            <td th:text="${order.deliveryAddress}"></td>
+            <td th:text="${order.totalPrice} + ' €'"></td>
+            <td th:text="${order.status}"></td>
+
+            <td>
+                <!-- PRIPRAVENA -->
+                <form th:if="${order.status.name() == 'PRIPRAVENA'}"
+                      th:action="@{|/kurier/orders/${order.id}/deliver|}"
+                      method="post">
+                    <button class="btn-primary">Prevziať</button>
+                </form>
+
+                <!-- DORUCUJE_SA -->
+                <form th:if="${order.status.name() == 'DORUCUJE_SA'}"
+                      th:action="@{|/kurier/orders/${order.id}/done|}"
+                      method="post">
+                    <button class="btn-success">Doručená</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Používatelia</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div th:replace="fragments/navbar :: navbar('')"></div>
+
+<div class="container">
+
+  <h1 class="page-title">
+    👤 Používatelia
+  </h1>
+
+  <table class="order-table">
+    <thead>
+    <tr>
+      <th>Email</th>
+      <th>Meno</th>
+      <th>Rola</th>
+      <th>Akcie</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="user : ${users}">
+      <td th:text="${user.email}"></td>
+      <td th:text="${user.fullName}"></td>
+
+      <!-- ROLA -->
+      <td>
+                <span th:each="role : ${user.roles}"
+                      th:text="${role.name}">
+                </span>
+      </td>
+
+      <!-- AKCIE -->
+      <td class="admin-actions-cell">
+
+        <!-- ZMENA ROLY -->
+        <form th:action="@{|/admin/users/${user.id}/role|}"
+              method="post"
+              class="inline-form">
+
+          <select name="roleId">
+            <option th:each="role : ${roles}"
+                    th:value="${role.id}"
+                    th:text="${role.name}"
+                    th:selected="${user.roles.contains(role)}">
+            </option>
+          </select>
+
+          <button type="submit" class="btn-primary">
+            Zmeniť rolu
+          </button>
+        </form>
+
+        <!-- ODSTRÁNENIE POUŽÍVATEĽA -->
+        <form th:action="@{|/admin/users/${user.id}/delete|}"
+              method="post"
+              class="inline-form"
+              onsubmit="return confirm('Naozaj chceš odstrániť používateľa?');">
+
+          <button type="submit" class="btn-danger">
+            Odstrániť
+          </button>
+        </form>
+
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>
+
+</body>
+</html>

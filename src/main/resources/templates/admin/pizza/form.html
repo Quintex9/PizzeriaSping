@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${pizza.id != null} ? 'Upraviť pizzu' : 'Pridať pizzu'">Formulár</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            max-width: 500px;
+            padding: 8px;
+        }
+        textarea {
+            min-height: 100px;
+        }
+        .sizes-container {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .size-row {
+            display: grid;
+            grid-template-columns: 100px 100px 150px auto;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: end;
+        }
+        .btn-remove-size {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar('')"></div>
+
+<div class="container">
+    <h1 class="page-title" th:text="${pizza.id != null} ? 'Upraviť pizzu' : 'Pridať pizzu'">Formulár</h1>
+
+    <div style="margin-bottom: 20px;">
+        <a th:href="@{/admin/pizza}" class="btn-secondary">← Späť</a>
+    </div>
+
+    <form th:action="${pizza.id != null} ? @{|/admin/pizza/edit/${pizza.id}|} : @{/admin/pizza/add}"
+          method="post"
+          th:object="${pizza}"
+          style="max-width: 600px;">
+
+        <div class="form-group">
+            <label>Názov *</label>
+            <input type="text" name="name" th:field="*{name}" required>
+            <span th:if="${#fields.hasErrors('name')}" 
+                  th:errors="*{name}" 
+                  class="error-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Popis</label>
+            <textarea name="description" th:field="*{description}"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>URL obrázka</label>
+            <input type="text" name="imageUrl" th:field="*{imageUrl}">
+            <span th:if="${#fields.hasErrors('imageUrl')}" 
+                  th:errors="*{imageUrl}" 
+                  class="error-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input type="checkbox" name="active" th:checked="${pizza.active}">
+                Aktívna
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label>Tagy</label>
+            <div class="checkbox-group">
+                <div class="checkbox-item" th:each="tag : ${tags}">
+                    <input type="checkbox" 
+                           name="tagIds" 
+                           th:value="${tag.id}"
+                           th:id="'tag-' + ${tag.id}"
+                           th:checked="${pizza.tags != null && pizza.tags.contains(tag)}">
+                    <label th:for="'tag-' + ${tag.id}" th:text="${tag.name}"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Veľkosti pízz</label>
+            <div class="sizes-container" id="sizes-container">
+                <div class="size-row" th:each="size, iterStat : ${pizza.sizes}" th:data-index="${iterStat.index}">
+                    <input type="text" 
+                           name="sizeLabels" 
+                           placeholder="M" 
+                           th:value="${size.sizeLabel}" 
+                           required>
+                    <input type="number" 
+                           name="sizeDiameters" 
+                           placeholder="30" 
+                           th:value="${size.diameterCm}" 
+                           min="1" 
+                           required>
+                    <input type="number" 
+                           name="sizePrices" 
+                           placeholder="10.50" 
+                           step="0.01" 
+                           th:value="${size.price}" 
+                           min="0" 
+                           required>
+                    <button type="button" class="btn-remove-size" onclick="removeSize(this)">Odstrániť</button>
+                </div>
+            </div>
+            <button type="button" onclick="addSizeRow()" class="btn-primary" style="margin-top: 10px;">+ Pridať veľkosť</button>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn-primary">Uložiť</button>
+            <a th:href="@{/admin/pizza}" class="btn-secondary" style="margin-left: 10px;">Zrušiť</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    function addSizeRow() {
+        const container = document.getElementById('sizes-container');
+        const newRow = document.createElement('div');
+        newRow.className = 'size-row';
+        newRow.innerHTML = `
+            <input type="text" name="sizeLabels" placeholder="M" required>
+            <input type="number" name="sizeDiameters" placeholder="30" min="1" required>
+            <input type="number" name="sizePrices" placeholder="10.50" step="0.01" min="0" required>
+            <button type="button" class="btn-remove-size" onclick="removeSize(this)">Odstrániť</button>
+        `;
+        container.appendChild(newRow);
+    }
+
+    function removeSize(button) {
+        button.parentElement.remove();
+    }
+
+    // If no sizes exist, add one empty row
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('sizes-container');
+        if (container.children.length === 0) {
+            addSizeRow();
+        }
+    });
+</script>
+
+</body>
+</html>
+

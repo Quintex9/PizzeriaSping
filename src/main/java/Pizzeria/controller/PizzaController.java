@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -37,5 +38,13 @@ public class PizzaController {
 
         return "pizza/list";
     }
+
+    @GetMapping("/pizza/{slug}")
+    public String pizzaDetail(@PathVariable String slug, Model model) {
+
+        model.addAttribute("pizza", pizzaService.findBySlug(slug));
+        return "pizza/detail";
+    }
+
 
 }

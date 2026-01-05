@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Pizze</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar('')"></div>
+
+<div class="container">
+    <h1 class="page-title">🍕 Pizze</h1>
+
+    <div style="margin-bottom: 20px;">
+        <a th:href="@{/admin/pizza/add}" class="btn-primary">+ Pridať pizzu</a>
+        <a th:href="@{/admin}" class="btn-secondary" style="margin-left: 10px;">← Späť</a>
+    </div>
+
+    <table class="order-table">
+        <thead>
+        <tr>
+            <th>Názov</th>
+            <th>Slug</th>
+            <th>Aktívna</th>
+            <th>Veľkosti</th>
+            <th>Akcie</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="pizza : ${pizzas}">
+            <td th:text="${pizza.name}"></td>
+            <td th:text="${pizza.slug}"></td>
+            <td>
+                <span th:if="${pizza.active}">Áno</span>
+                <span th:unless="${pizza.active}">Nie</span>
+            </td>
+            <td th:text="${#sets.size(pizza.sizes)} + ' veľkostí'"></td>
+            <td class="admin-actions-cell">
+                <a th:href="@{|/admin/pizza/edit/${pizza.id}|}" class="btn-primary">Upraviť</a>
+                <form th:action="@{|/admin/pizza/delete/${pizza.id}|}"
+                      method="post"
+                      style="display:inline;"
+                      onsubmit="return confirm('Naozaj chceš deaktivovať pizzu?');">
+                    <button type="submit" class="btn-danger">Deaktivovať</button>
+                </form>
+                <a th:href="@{|/pizza/${pizza.slug}|}" class="btn-secondary" target="_blank">Zobraziť</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
+

@@ -14,7 +14,20 @@ public interface UserService {
 
     User save(User user);
 
+    User getCurrentUser();
+
+    void updateProfile(String fullName, String phone, String address, String profileImageUrl);
+
+    boolean changePassword(String currentPassword,
+                           String newPassword,
+                           String confirmPassword);
+
+
     void deleteById(Integer id);
 
     boolean existsByEmail(String email);
+
+    void assignRole(Integer userId, Integer roleId);
+    void resetPassword(Integer userId, String newPassword);
+
 }

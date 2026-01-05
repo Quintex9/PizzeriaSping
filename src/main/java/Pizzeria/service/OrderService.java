@@ -8,11 +8,28 @@ public interface OrderService {
 
     Order findById(Integer id);
 
-    List<Order> findByCustomer(Integer customerId);
+    List<Order> findForCustomer(Integer customerId);
 
-    List<Order> findByStatus(String status);
+    List<Order> findForCookWithInProgress();
+
+    List<Order> findForCourierWithInProgress();
 
     Order save(Order order);
 
-    void deleteById(Integer id);
+    Order createOrderFromCart(String note);
+
+    void assignCook(Integer orderId);
+
+    void markReady(Integer orderId);
+
+    void assignCourier(Integer orderId);
+
+    void markDelivered(Integer orderId);
+
+    void cancelOrder(Integer orderId);
+
+    List<Order> findAll();
+
+    long countNewUnassignedOrders();
+
 }

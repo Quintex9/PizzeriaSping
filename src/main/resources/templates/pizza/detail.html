@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${pizza.name}">Detail pizze</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div th:replace="fragments/navbar :: navbar('pizza')"></div>
+
+<div class="container">
+
+  <div class="pizza-detail">
+
+    <div>
+      <img th:src="${pizza.imageUrl}"
+           alt="Pizza obrázok"
+           class="pizza-detail-image">
+    </div>
+
+    <div>
+      <h1 th:text="${pizza.name}">Názov pizze</h1>
+      
+      <p th:text="${pizza.description}">Popis pizze</p>
+
+      <h3>Dostupné veľkosti</h3>
+
+      <ul class="size-list">
+        <li th:each="size : ${pizza.sizes}">
+          <strong th:text="${size.sizeLabel}">M</strong>
+          <span th:text="${size.price + ' €'}"></span>
+
+          <form th:action="@{/cart/add}" method="post" style="display:inline;">
+            <input type="hidden" name="pizzaId" th:value="${pizza.id}">
+            <input type="hidden" name="sizeId" th:value="${size.id}">
+            <input type="hidden" name="redirect"
+                   th:value="@{|/pizza/${pizza.slug}|}">
+            <button type="submit" class="add-cart-btn">Pridať</button>
+          </form>
+        </li>
+      </ul>
+
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  © 2025 Pizzeria
+</footer>
+
+</body>
+</html>

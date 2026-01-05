@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${ingredient.id != null} ? 'Upraviť ingredienciu' : 'Pridať ingredienciu'">Formulár</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            max-width: 500px;
+            padding: 8px;
+        }
+        textarea {
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar('')"></div>
+
+<div class="container">
+    <h1 class="page-title" th:text="${ingredient.id != null} ? 'Upraviť ingredienciu' : 'Pridať ingredienciu'">Formulár</h1>
+
+    <div style="margin-bottom: 20px;">
+        <a th:href="@{/admin/ingredient}" class="btn-secondary">← Späť</a>
+    </div>
+
+    <form th:action="${ingredient.id != null} ? @{|/admin/ingredient/edit/${ingredient.id}|} : @{/admin/ingredient/add}"
+          method="post"
+          th:object="${ingredient}"
+          style="max-width: 600px;">
+
+        <div class="form-group">
+            <label>Názov *</label>
+            <input type="text" name="name" th:field="*{name}" required>
+            <span th:if="${#fields.hasErrors('name')}" 
+                  th:errors="*{name}" 
+                  class="error-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Popis</label>
+            <textarea name="description" th:field="*{description}"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Príplatok (€) *</label>
+            <input type="number" 
+                   name="extraPrice" 
+                   th:field="*{extraPrice}" 
+                   step="0.01" 
+                   min="0" 
+                   required>
+            <span th:if="${#fields.hasErrors('extraPrice')}" 
+                  th:errors="*{extraPrice}" 
+                  class="error-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input type="checkbox" name="active" th:checked="${ingredient.active}">
+                Aktívna
+            </label>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn-primary">Uložiť</button>
+            <a th:href="@{/admin/ingredient}" class="btn-secondary" style="margin-left: 10px;">Zrušiť</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
+

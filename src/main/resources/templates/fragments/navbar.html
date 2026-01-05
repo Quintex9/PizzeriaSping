@@ -15,23 +15,54 @@
             Ponuka
         </a>
 
+        <!-- KOŠÍK A OBJEDNÁVKY – pre všetkých prihlásených -->
         <a th:href="@{/cart}"
+           sec:authorize="isAuthenticated()"
            th:classappend="${active == 'cart'} ? 'active'">
             Košík
+        </a>
+
+        <a th:href="@{/order/my}"
+           sec:authorize="isAuthenticated()"
+           th:classappend="${active == 'orders'} ? 'active'">
+            Moje objednávky
+        </a>
+
+        <!--  KUCHÁR -->
+        <a th:href="@{/kuchar/orders}"
+           sec:authorize="hasRole('KUCHAR')"
+           th:classappend="${active == 'cook'} ? 'active'"
+           th:with="newCount=${newOrdersCount != null ? newOrdersCount : 0}">
+            Kuchár
+            <span th:if="${newCount > 0}"
+                  class="notification-badge"
+                  th:text="${newCount}">0</span>
+        </a>
+
+        <!-- KURIÉR -->
+        <a th:href="@{/kurier/orders}"
+           sec:authorize="hasRole('KURIER')">
+            Kuriér
+        </a>
+
+        <!-- ADMIN -->
+        <a th:href="@{/admin}"
+           sec:authorize="hasRole('ADMIN')">
+            Admin
         </a>
     </div>
 
     <div class="right">
 
-        <!-- Neprihlásený -->
+        <!-- NEPRIHLÁSENÝ -->
         <span sec:authorize="isAnonymous()">
             <a th:href="@{/login}">Prihlásiť</a>
             <a th:href="@{/register}">Registrovať</a>
         </span>
 
-        <!-- Prihlásený -->
+        <!-- PRIHLÁSENÝ -->
         <span sec:authorize="isAuthenticated()">
-            <a th:href="@{/profile}">Môj profil</a>
+            <a th:href="@{/profile}">Profil</a>
             <a th:href="@{/logout}">Odhlásiť</a>
         </span>
 

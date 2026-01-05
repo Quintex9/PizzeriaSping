@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Potvrdenie objednávky</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar('cart')"></div>
+
+<div class="container">
+
+  <h1>Potvrdenie objednávky</h1>
+
+  <div th:each="item : ${items}">
+    <p>
+      <strong th:text="${item.pizzaName}"></strong>
+      (<span th:text="${item.sizeLabel}"></span>) –
+      <span th:text="${item.quantity}"></span> ks –
+      <span th:text="${item.price * item.quantity} + ' €'"></span>
+    </p>
+  </div>
+
+  <h2>Spolu: <span th:text="${total} + ' €'"></span></h2>
+
+  <form th:action="@{/order/confirm}" method="post">
+    <button type="submit" class="btn-success">
+      Potvrdiť objednávku
+    </button>
+  </form>
+
+</div>
+
+</body>
+</html>

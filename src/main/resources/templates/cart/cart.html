@@ -47,7 +47,12 @@
 
             <div class="cart-buttons">
                 <a th:href="@{/cart/clear}" class="btn-danger">Vyprázdniť košík</a>
-                <a th:href="@{/order}" class="btn-success">Objednať</a>
+                <form th:action="@{/order}" method="post">
+                    <button type="submit" class="btn-success">
+                        Objednať
+                    </button>
+                </form>
+
             </div>
         </div>
 

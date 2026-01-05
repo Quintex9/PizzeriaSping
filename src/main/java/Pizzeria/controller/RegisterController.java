@@ -4,9 +4,11 @@ import Pizzeria.entity.Role;
 import Pizzeria.entity.User;
 import Pizzeria.repository.RoleRepository;
 import Pizzeria.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -33,7 +35,13 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("user") User user, Model model) {
+    public String register(@Valid @ModelAttribute("user") User user, 
+                          BindingResult bindingResult, 
+                          Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "register";
+        }
 
         if (userService.existsByEmail(user.getEmail())) {
             model.addAttribute("error", "Email je už používaný!");
@@ -42,7 +50,7 @@ public class RegisterController {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        Role customerRole = roleRepository.findByName("ROLE_CUSTOMER");
+        Role customerRole = roleRepository.findByName("ROLE_ZAKAZNIK");
         if (customerRole == null) {
             model.addAttribute("error", "Rola ROLE_CUSTOMER neexistuje!");
             return "register";

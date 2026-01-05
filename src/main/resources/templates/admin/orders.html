@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Objednávky</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar('')"></div>
+
+<div class="container">
+    <h1>📦 Všetky objednávky</h1>
+
+    <table class="order-table">
+        <thead>
+        <tr>
+            <th>Kód</th>
+            <th>Zákazník</th>
+            <th>Stav</th>
+            <th>Cena</th>
+            <th>Kuchár</th>
+            <th>Kuriér</th>
+            <th>Vytvorené</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.code}"></td>
+            <td th:text="${order.customer.email}"></td>
+            <td th:text="${order.status}"></td>
+            <td th:text="${order.totalPrice} + ' €'"></td>
+            <td th:text="${order.assignedCook != null ? order.assignedCook.email : '-'}"></td>
+            <td th:text="${order.assignedCourier != null ? order.assignedCourier.email : '-'}"></td>
+            <td th:text="${#temporals.format(order.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

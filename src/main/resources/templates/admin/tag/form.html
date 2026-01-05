@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${tag.id != null} ? 'Upraviť tag' : 'Pridať tag'">Formulár</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        textarea {
+            width: 100%;
+            max-width: 500px;
+            padding: 8px;
+        }
+        textarea {
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar('')"></div>
+
+<div class="container">
+    <h1 class="page-title" th:text="${tag.id != null} ? 'Upraviť tag' : 'Pridať tag'">Formulár</h1>
+
+    <div style="margin-bottom: 20px;">
+        <a th:href="@{/admin/tag}" class="btn-secondary">← Späť</a>
+    </div>
+
+    <form th:action="${tag.id != null} ? @{|/admin/tag/edit/${tag.id}|} : @{/admin/tag/add}"
+          method="post"
+          th:object="${tag}"
+          style="max-width: 600px;">
+
+        <div class="form-group">
+            <label>Názov *</label>
+            <input type="text" name="name" th:field="*{name}" required>
+            <span th:if="${#fields.hasErrors('name')}" 
+                  th:errors="*{name}" 
+                  class="error-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Popis</label>
+            <textarea name="description" th:field="*{description}"></textarea>
+            <span th:if="${#fields.hasErrors('description')}" 
+                  th:errors="*{description}" 
+                  class="error-message"></span>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn-primary">Uložiť</button>
+            <a th:href="@{/admin/tag}" class="btn-secondary" style="margin-left: 10px;">Zrušiť</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
+

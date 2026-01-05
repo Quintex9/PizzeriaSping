@@ -24,7 +24,8 @@ public class SecurityConfig {
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider auth = new DaoAuthenticationProvider(userDetailsService);
+        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
+        auth.setUserDetailsService(userDetailsService);
         auth.setPasswordEncoder(passwordEncoder());
         return auth;
     }
@@ -41,14 +42,16 @@ public class SecurityConfig {
                                 "/register", "/login")
                         .permitAll()
 
+                        // PROFIL, KOŠÍK, OBJEDNÁVKY – len prihlásený používateľ
+                        .requestMatchers("/profile/**", "/cart/**", "/order/**").authenticated()
 
-                        .requestMatchers("/cart/**", "/order/**").hasRole("CUSTOMER")
-                        .requestMatchers("/kuchar/**").hasRole("COOK")
-                        .requestMatchers("/kurier/**").hasRole("COURIER")
+                        .requestMatchers("/kuchar/**").hasRole("KUCHAR")
+                        .requestMatchers("/kurier/**").hasRole("KURIER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )
+
                 .formLogin(form -> form
                         .loginPage("/login")
                         .defaultSuccessUrl("/", true)

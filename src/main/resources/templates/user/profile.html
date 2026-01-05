@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Môj profil</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div th:replace="fragments/navbar :: navbar('profile')"></div>
+
+<div class="container">
+
+    <h1>Môj profil</h1>
+
+    <div th:if="${success}" class="alert success"
+         th:text="${success}"></div>
+
+    <div th:if="${error}" class="alert error"
+         th:text="${error}"></div>
+
+
+    <div class="profile-card">
+
+        <div class="profile-avatar">
+            <img th:src="${user.profileImageUrl}"
+                 alt="Profilový obrázok">
+        </div>
+
+        <div class="profile-info">
+            <p><strong>Meno:</strong> <span th:text="${user.fullName}"></span></p>
+            <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+            <p><strong>Telefón:</strong> <span th:text="${user.phone}"></span></p>
+            <p><strong>Adresa:</strong> <span th:text="${user.address}"></span></p>
+
+            <p>
+                <strong>Role:</strong>
+                <span th:each="role : ${user.roles}"
+                      th:text="${role.name}"
+                      class="role-badge"></span>
+            </p>
+
+            <div class="profile-actions">
+                <a th:href="@{/profile/edit}" class="btn-primary">
+                    Upraviť profil
+                </a>
+
+                <a th:href="@{/profile/password}" class="btn-secondary">
+                    Zmeniť heslo
+                </a>
+
+                <a th:href="@{/order/my}" class="btn-secondary">
+                    Moje objednávky
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<footer>
+    © 2025 Pizzeria
+</footer>
+
+</body>
+</html>

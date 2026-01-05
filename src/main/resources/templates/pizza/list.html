@@ -43,11 +43,14 @@
 
             <h3 th:text="${pizza.name}">Názov pizze</h3>
             <p th:text="${pizza.description}">Popis pizze</p>
+            
+            <a th:href="@{|/pizza/${pizza.slug}|}" class="btn-primary">
+                Detail
+            </a>
 
             <div class="price-section">
 
                 <div class="size-row" th:each="size : ${pizza.sizes}">
-
                     <strong th:text="${size.sizeLabel}">M</strong>:
                     <span th:text="${size.price + ' €'}"></span>
 
@@ -57,9 +60,7 @@
                         <input type="hidden" name="redirect" th:value="${redirect}">
                         <button type="submit" class="add-cart-btn">Pridať</button>
                     </form>
-
                 </div>
-
             </div>
 
         </div>

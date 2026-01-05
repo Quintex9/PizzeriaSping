@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit profilu</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div th:replace="fragments/navbar :: navbar('profile')"></div>
+
+<div class="container">
+
+    <h1>Edit profilu</h1>
+
+    <div th:if="${success}" class="alert success"
+         th:text="${success}"></div>
+
+    <div th:if="${error}" class="alert error"
+         th:text="${error}"></div>
+
+
+    <form th:action="@{/profile/edit}" method="post" class="profile-edit-form">
+
+        <label>Meno</label>
+        <input type="text" name="fullName" th:value="${user.fullName}" required>
+
+        <label>Telefón (formát: 0944 121 302)</label>
+        <input type="text" name="phone" th:value="${user.phone}" placeholder="0944 121 302" pattern="0[0-9]{3} [0-9]{3} [0-9]{3}">
+
+        <label>Adresa</label>
+        <input type="text" name="address" th:value="${user.address}">
+
+        <label>Profilový obrázok (URL)</label>
+        <input type="url" name="profileImageUrl"
+               th:value="${user.profileImageUrl}"
+               placeholder="https://example.com/avatar.jpg">
+
+        <button type="submit" class="btn-primary">Uložiť zmeny</button>
+    </form>
+
+</div>
+
+<footer>© 2025 Pizzeria</footer>
+
+</body>
+</html>

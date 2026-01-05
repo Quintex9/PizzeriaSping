@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ingrediencie</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar('')"></div>
+
+<div class="container">
+    <h1 class="page-title">🥗 Ingrediencie</h1>
+
+    <div style="margin-bottom: 20px;">
+        <a th:href="@{/admin/ingredient/add}" class="btn-primary">+ Pridať ingredienciu</a>
+        <a th:href="@{/admin}" class="btn-secondary" style="margin-left: 10px;">← Späť</a>
+    </div>
+
+    <table class="order-table">
+        <thead>
+        <tr>
+            <th>Názov</th>
+            <th>Slug</th>
+            <th>Príplatok</th>
+            <th>Aktívna</th>
+            <th>Akcie</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="ingredient : ${ingredients}">
+            <td th:text="${ingredient.name}"></td>
+            <td th:text="${ingredient.slug}"></td>
+            <td th:text="${ingredient.extraPrice} + ' €'"></td>
+            <td>
+                <span th:if="${ingredient.active}">Áno</span>
+                <span th:unless="${ingredient.active}">Nie</span>
+            </td>
+            <td class="admin-actions-cell">
+                <a th:href="@{|/admin/ingredient/edit/${ingredient.id}|}" class="btn-primary">Upraviť</a>
+                <form th:action="@{|/admin/ingredient/delete/${ingredient.id}|}"
+                      method="post"
+                      style="display:inline;"
+                      onsubmit="return confirm('Naozaj chceš odstrániť ingredienciu?');">
+                    <button type="submit" class="btn-danger">Zmazať</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
+
