@@ -72,3 +72,24 @@ Projekt slúži ako plnohodnotný backend + frontend systém pre objednávanie p
 ### Bezpečnosť dát
 - zákaz mazania systémových rolí
 - zákaz mazania entít použitých v objednávkach
+
+- ---
+
+## Ako spustiť projekt (lokálne)
+
+### Požiadavky
+- Java **17+**
+- Maven **3.8+**
+- MySQL **8+**
+
+Overenie:
+```bash
+java -version
+mvn -version
+
+git clone https://github.com/Quintex9/PizzeriaSping.git
+cd PizzeriaSping
+
+mvn spring-boot:run
+
+http://localhost:8080
