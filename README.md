@@ -90,6 +90,8 @@ mvn -version
 git clone https://github.com/Quintex9/PizzeriaSping.git
 cd PizzeriaSping
 
+Spustenie XAMPP - Apache + MySQL - do admin panelu skopírovať DB_FULL alebo CREATE_SCRIPT + DEMO_DATA
+
 mvn spring-boot:run
 
 http://localhost:8080
