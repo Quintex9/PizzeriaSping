@@ -95,3 +95,8 @@ Spustenie XAMPP - Apache + MySQL - do admin panelu skopírovať DB_FULL alebo CR
 mvn spring-boot:run
 
 http://localhost:8080
+
+zakaznik@pizzeria.sk - heslo -> zakaznik123
+kuchar@pizzeria.sk - heslo -> kuchar123
+kurier@pizzeria.sk - heslo -> kurier123
+admin@pizzeria.sk - heslo -> admin123
